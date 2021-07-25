@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Presenter from './presenter';
 
 const Container = (props) => {
+
+
     return(
-        <Presenter {...props}/>
+        <Presenter 
+
+        />
     
             
     )};

@@ -3,7 +3,10 @@ import Container from '../../common/util/container';
 import 'react-slideshow-image/dist/styles.css';
 import { Slide } from 'react-slideshow-image';
 import { Row, Col } from 'antd';
-import bannerImg from '../../common/assets/img/mainPage/bannerImg.jpeg';
+import bannerImg0 from '../../common/assets/img/mainPage/bannerImg.jpeg';
+import bannerImg1 from '../../common/assets/img/mainPage/bannerImg1.jpeg';
+import bannerImg2 from '../../common/assets/img/mainPage/bannerImg2.jpeg';
+import bannerImg3 from '../../common/assets/img/mainPage/bannerImg3.jpeg';
 import autoSlideImg0 from '../../common/assets/img/mainPage/autoSlideImg0.jpeg';
 import autoSlideImg1 from '../../common/assets/img/mainPage/autoSlideImg1.jpeg';
 import autoSlideImg2 from '../../common/assets/img/mainPage/autoSlideImg2.jpeg';
@@ -30,9 +33,36 @@ const Presenter = (props) => {
 export default Presenter;
 
 const Banner = () => {
+
+        const bannerImages = [
+          {
+            data: bannerImg0,
+          },
+          {
+            data: bannerImg1,
+          },
+          {
+            data: bannerImg2,
+          },
+          {
+            data: bannerImg3,
+          },
+        ];
+
+        const properties = {
+            duration: 3500,
+            slidesToScroll: 1,
+            autoplay: true,
+            indicators: true,
+          };
   return (
     <div>
-      <img className="bannerImg" src={bannerImg} />
+
+        <Slide {...properties}>
+          {bannerImages.map((img, idx) => (
+            <img src={img.data} className="bannerImg" />
+          ))}
+        </Slide>
     </div>
   );
 };
@@ -57,7 +87,7 @@ const AutoSlide = () => {
   ];
 
   const properties = {
-    duration: 3000,
+    duration: 2500,
     slidesToShow: 2,
     slidesToScroll: 2,
     autoplay: true,

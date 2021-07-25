@@ -54,16 +54,22 @@ code  {
   left: 0;
 }
 
-/* AutoSlide */
+/* IMAGE */
 
 .slideImg {
   max-width: 400px;
 }
 
-/* display */
+.madeImg {
+  max-width: 220px;
+}
+
 .displayImg {
-  max-width: 270px;
-  max-height: 340px;
+  max-width: 250px;
+}
+
+.displayDetailImg {
+  max-width: 500px;
 }
 
 /* Title */
@@ -73,4 +79,54 @@ code  {
   margin-top: 120px;
   letter-spacing: -3px;
   word-spacing: 5px;
+}
+
+.description {
+  color: red;
+}
+
+/* Buttons */
+.blackButton {
+  background-color: #000000 !important;
+  margin-left: 5px !important;
+  border: 0 !important;
+  color: #fff !important;
+  border-radius: 2px !important;
+  width: 130px !important;
+  height: 50px !important;
+}
+
+.greyButton {
+  background-color: #dddddd !important;
+  margin-left: 5px !important;
+  border: 0 !important;
+  color: #111111 !important;
+  border-radius: 2px !important;
+  width: 130px !important;
+  height: 50px !important;
+}
+
+/* signin */
+.signInBox {
+  position: relative;
+  width: 450px;
+  margin: 0 auto;
+  padding: 40px 50px;
+  border-radius: 10px;
+}
+
+.loginBtn {
+  background-color: #000000 !important;
+  border: 0 !important;
+  color: #fff !important;
+  width: 100% !important;
+  height: 30px !important;
+}
+
+.joinusBtn {
+  background-color: #fff !important;
+  border: 1px solid #222 !important;
+  color: #111111 !important;
+  width: 100% !important;
+  height: 30px !important;
 }

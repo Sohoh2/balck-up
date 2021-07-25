@@ -15,7 +15,7 @@ const Presenter = (props) => {
                 <div style={{display:'flex', justifyContent:'space-between'}}>
                     <div>
                         <Link className="navigationMenu" to="/made" >MADE</Link>
-                        <Link className="navigationMenu" to="/display" >DISPLAY</Link>
+                        {/* <Link className="navigationMenu" to="/display" >DISPLAY</Link> */}
                     </div>
                     <div>
                         <Link className="navigationMenu" to='/signIn'>LOGIN</Link>
