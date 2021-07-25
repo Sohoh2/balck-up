@@ -1,15 +1,22 @@
 import React from 'react';
+import Container from '../../../common/util/container';
 
 const Presenter = (props) => {
-    return(
-        <div>
-            <div>SignUp</div>
-            <input type="text" /><br/>
-            <input type="password" /><br/>
+    const { id, setId, pwd, setPwd , sendBtn} = props;
 
-            <button>SIGN UP</button>
-        
-        </div>    
+    return(
+        <Container>
+            <div>SignIn</div>
+            <input 
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+            type="text" /><br/>
+            <input 
+            value={pwd}
+            onChange={(e) => setPwd(e.target.value)}
+            type="password" /><br/>
+            <button onClick={sendBtn} >SIGN IN</button>
+        </Container>    
     )};
 
 export default Presenter;
