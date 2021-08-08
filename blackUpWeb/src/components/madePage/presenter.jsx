@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
 import Container from '../../common/util/container';
-import { Row, Col } from 'antd';
+import { Button, Row, Col, InputGroup, Label, Form } from 'reactstrap';
 import displayImg0 from '../../common/assets/img/mainPage/displayImg0.jpeg';
 import displayImg1 from '../../common/assets/img/mainPage/displayImg1.jpeg';
 import displayImg2 from '../../common/assets/img/mainPage/displayImg2.jpeg';
@@ -57,7 +57,7 @@ const ItemList = (props) => {
       ];
     return(
         <>
-        <Row  justify="space-around" gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+        <Row >
         {displayImages.map((img,idx) =>(
                     <Col className="gutter-row" span={6}>
                     <div style={style}>

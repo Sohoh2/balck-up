@@ -41,6 +41,7 @@ const Container = (props) => {
             history.push('/')
         })
         .catch(err => {
+            alert(err)
 
         })
         

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Container from '../../common/util/container';
 import 'react-slideshow-image/dist/styles.css';
 import { Slide } from 'react-slideshow-image';
-import { Row, Col } from 'antd';
+import { Button, Row, Col, InputGroup, Label, Form } from 'reactstrap';
+
 import bannerImg0 from '../../common/assets/img/mainPage/bannerImg.jpeg';
 import bannerImg1 from '../../common/assets/img/mainPage/bannerImg1.jpeg';
 import bannerImg2 from '../../common/assets/img/mainPage/bannerImg2.jpeg';
@@ -127,7 +128,7 @@ const RecentHotItem = () => {
   return (
     <div>
       <span className="title">Recent Hot Item</span>
-      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+      <Row>
           {displayImages.map((img,idx) =>(
                       <Col className="gutter-row" span={6}>
                       <div style={style}>
@@ -138,7 +139,7 @@ const RecentHotItem = () => {
                     </Col>
           ))}
       </Row>
-      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+      <Row>
           {displayImages.map((img,idx) =>(
                       <Col className="gutter-row" span={6}>
                       <div style={style}>
@@ -149,6 +150,7 @@ const RecentHotItem = () => {
                     </Col>
           ))}
       </Row>
+
     </div>
   );
 };
