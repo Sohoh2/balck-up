@@ -13,8 +13,17 @@ const { verifyAccessToken } = require("../util/utilFunction");
  * 주문 생성
  */
 router.post("/",async (req, res) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    if (!token) {
+        console.log("wrong token format or token is not sended");
+        return res.sendStatus(400);
+    }
 
-      const SQL = "insert into shop_order(mem_id, order_status, phone, address, name, description, register_at) values (?,?,?,?,?,?);";
+    const verifyResult = await verifyAccessToken(token, "access");
+    if (verifyResult.id) {
+        console.log(req.body)
+      const SQL = "insert into shop_order(mem_id, order_status, phone, address, name, description, register_at) values (?,?,?,?,?,?,?);";
       connection.query(
         SQL,
         [req.body.mem_id, "INIT", req.body.phone, req.body.address, req.body.name, req.body.description || "", new Date().toISOString()],
@@ -48,6 +57,13 @@ router.post("/",async (req, res) => {
           }
         }
       );
+    } else {
+      return res.status(400).json({
+          status: "fail",
+          message: "unauthorized"
+      });   
+    }
+
 
 });
 
@@ -55,6 +71,15 @@ router.post("/",async (req, res) => {
  * 주문 결제
  */
 router.post("/paid",async (req, res) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    if (!token) {
+        console.log("wrong token format or token is not sended");
+        return res.sendStatus(400);
+    }
+
+    const verifyResult = await verifyAccessToken(token, "access");
+    if (verifyResult.id) {
 
       const SQL = "insert into payment(order_id, amount_pay, register_at) values (?,?,?)";
       connection.query(
@@ -104,6 +129,14 @@ router.post("/paid",async (req, res) => {
           }
         }
       );
+
+    } else {
+      return res.status(400).json({
+          status: "fail",
+          message: "unauthorized"
+      });   
+    }
+
    
 });
 

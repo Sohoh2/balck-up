@@ -7,41 +7,6 @@ const { verifyAccessToken } = require("../util/utilFunction");
  * TODO Swagger UI 연결하도록
  */
 
-
-/**
- * 카테고리
- */
-/**
-*  @swagger
-*  paths:
-*   /books:
-*     get:
-*       summary: Lists all the books
-*       tags: [Books]
-*       responses:
-*         "200":
-*           description: The list of books.
-*           content:
-*             application/json:
-*               schema:
-*                 $ref: '#/components/schemas/Book'
-*     post:
-*       summary: Creates a new book
-*       tags: [Books]
-*       requestBody:
-*         required: true
-*         content:
-*           application/json:
-*             schema:
-*               $ref: '#/components/schemas/Book'
-*       responses:
-*         "200":
-*           description: The created book.
-*           content:
-*             application/json:
-*               schema:
-*                 $ref: '#/components/schemas/Book'
-*/
 router.get("/category",async (req, res) => {
 
       const SQL = "SELECT * FROM category";

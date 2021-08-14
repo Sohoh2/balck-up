@@ -3,29 +3,6 @@ const router = express.Router();
 const connection = require("../connection");
 const { dycryptionData, encryptionData, generateAccessToken, generateRefreshToken, verifyAccessToken } = require("../util/utilFunction");
 
-/**
- * @swagger
-paths:
-  /signup:
-    post:
-      summary: signup member
-      requestBody:
-        content:
-          application/json:
-            schema:      # Request body contents
-              type: object
-              properties:
-                id:
-                  type: integer
-                name:
-                  type: string
-              example:   # Sample object
-                id: 10
-                name: Jessica Smith
-      responses:
-        '200':
-          description: OK
- */
 router.post("/signup", (req, res) => {
 
   if (req.body.id && req.body.password) {
@@ -137,7 +114,6 @@ router.get("/verify",async (req, res) => {
 
     let authHeader = req.headers.authorization;
     let token = authHeader && authHeader.split(" ")[1];
-      console.log(authHeader)
     if (!token) {
         console.log("wrong token format or token is not sended");
         return res.sendStatus(400);

@@ -32,7 +32,7 @@ const options = {
   },
   explorer: true
 };
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, options));
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, options));
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
