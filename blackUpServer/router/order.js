@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../connection");
-const { verifyAccessToken } = require("../util/utilFunction");
+const { verifyAccessToken, executeQuery } = require("../util/utilFunction");
 
 /**
  * TODO: 주문생성시 order_detail에 물품리스트 들어가도록
@@ -24,39 +24,26 @@ router.post("/",async (req, res) => {
     if (verifyResult.id) {
         console.log(req.body)
       const SQL = "insert into shop_order(mem_id, order_status, phone, address, name, description, register_at) values (?,?,?,?,?,?,?);";
-      connection.query(
-        SQL,
-        [req.body.mem_id, "INIT", req.body.phone, req.body.address, req.body.name, req.body.description || "", new Date().toISOString()],
-        function (err, result = [], fields) {
-          if (err) {
-            return res.status(400).json({
-              status: "error",
-              error: "req body cannot be empty",
-            });
-          } else {
-            console.log("결과",result);
-            const SQL2 = "select * from shop_order where mem_id=? order by register_at DESC limit 1;"
-              connection.query(
-                SQL2,
-                [req.body.mem_id],
-                function (err, result = [], fields) {
-                  if (err) {
-                    return res.status(400).json({
-                      status: "error",
-                      error: "req body cannot be empty",
-                    });
-                  } else {
-                    console.log("결과 오더???",result);
-                      return res.status(200).json({
-                          status: "success",
-                          data: result.length > 0 ? result[0] : {}
-                      });     
-                  }
-                }
-              );
-          }
-        }
-      );
+      const insertRs = await executeQuery(SQL, [req.body.mem_id, "INIT", req.body.phone, req.body.address, req.body.name, req.body.description || "", new Date().toISOString()]);
+
+      if (insertRs.status === "success") {
+        const SQL2 = "select * from shop_order where mem_id=? order by register_at DESC limit 1;"
+        const selectRs = await executeQuery(SQL2, [req.body.mem_id]);
+
+        const orderInfo = selectRs.data.length > 0 ? selectRs.data[0] : {}
+
+        const DETAIL_SQL = "insert into shop_order_detail(order_id, prod_id, order_quantity, register_at) values(?,?,?,?)"
+        req.body.products.forEach(prod => {
+          executeQuery(DETAIL_SQL, [orderInfo.order_id, prod.prod_id, prod.order_quantity, new Date().toISOString()]);
+        });
+
+          return res.status(200).json({
+              ...selectRs,
+              data: orderInfo
+          });     
+      } else {
+        return res.status(400).json(insertRs);
+      }
     } else {
       return res.status(400).json({
           status: "fail",
@@ -70,7 +57,7 @@ router.post("/",async (req, res) => {
 /**
  * 주문 결제
  */
-router.post("/paid",async (req, res) => {
+router.post("/paid", async (req, res) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(" ")[1];
     if (!token) {
