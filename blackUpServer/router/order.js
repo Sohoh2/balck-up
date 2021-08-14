@@ -97,9 +97,65 @@ router.post("/paid", async (req, res) => {
           status: "fail",
           message: "unauthorized"
       });   
+    }   
+});
+
+/**
+ * 주문 취소
+ */
+router.post("/cancel", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    if (!token) {
+        console.log("wrong token format or token is not sended");
+        return res.sendStatus(400);
     }
 
-   
+    const verifyResult = await verifyAccessToken(token, "access");
+    if (verifyResult.id) {
+      const SELECT_ORDER_SQL = "select * from shop_order where order_id=?";
+      const selectRs = await executeQuery(SELECT_ORDER_SQL, [req.body.order_id]);
+
+      const selectInfo = selectRs.data[0] || {};
+
+      if (selectInfo.order_status !== "CANCEL") {
+        const UPDATE_STATUS_SQL = "update shop_order set order_status=?, update_at=? where order_id=?";
+        const updateRs = await executeQuery(UPDATE_STATUS_SQL, ["CANCEL", new Date().toISOString(), req.body.order_id]);
+        if (updateRs.status === "success") {
+          const SELECT_ORDER_DETAILS = "select * from shop_order_detail where order_id=?"
+          const selectOrderDetailRs = await executeQuery(SELECT_ORDER_DETAILS, [req.body.order_id]);
+          
+          const productsData = selectOrderDetailRs.data || [];
+        
+          const SELECT_INVENTORY = "select * from inventory where prod_id=?";
+          const UPDATE_INVENTORY = "update inventory set inventory_quantity=?, update_at=? where prod_id=?";
+  
+          productsData.forEach(async prod => {
+            const selectInventoryRs = await executeQuery(SELECT_INVENTORY, [prod.prod_id]);
+            const inventoryInfo = selectInventoryRs.data[0] || {};
+  
+            executeQuery(UPDATE_INVENTORY, [inventoryInfo.inventory_quantity + prod.order_quantity, new Date().toISOString(), prod.prod_id]);
+          })
+  
+          return res.status(200).json(updateRs);  
+        } else {
+          return res.status(400).json(updateRs);
+        }
+      } else {
+        res.status(200).json({
+          status: "fail",
+          message: "already canceled"
+        })
+      }
+
+
+
+    } else {
+      return res.status(400).json({
+          status: "fail",
+          message: "unauthorized"
+      });   
+    }   
 });
 
 module.exports = router;
