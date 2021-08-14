@@ -4,12 +4,6 @@ const connection = require("../connection");
 const { verifyAccessToken, executeQuery } = require("../util/utilFunction");
 
 /**
- * TODO: 주문생성시 order_detail에 물품리스트 들어가도록
- * 
- * 주문 결제 이후 inventory에서 물품리스트 order_quantity 만큼 차감하도록 로직 설정
- */
-
-/**
  * 주문 생성
  */
 router.post("/",async (req, res) => {
@@ -68,54 +62,35 @@ router.post("/paid", async (req, res) => {
     const verifyResult = await verifyAccessToken(token, "access");
     if (verifyResult.id) {
 
-      const SQL = "insert into payment(order_id, amount_pay, register_at) values (?,?,?)";
-      connection.query(
-        SQL,
-        [req.body.order_id, req.body.total_price, new Date().toISOString()],
-        function (err, result = [], fields) {
-          if (err) {
-            return res.status(400).json({
-              status: "error",
-              error: "req body cannot be empty",
-            });
-          } else {
-            console.log("결과",result);
-            const SQL2 = "select * from payment where order_id=? order by register_at DESC limit 1;"
-              connection.query(
-                SQL2,
-                [req.body.order_id],
-                function (err, result = [], fields) {
-                  if (err) {
-                    return res.status(400).json({
-                      status: "error",
-                      error: "req body cannot be empty",
-                    });
-                  } else {
-                    console.log("결과 페이먼트???",result);
-                    const SQL3 = "update shop_order set order_status=?, pay_id=?, update_at=? where order_id=?"
-                      connection.query(
-                        SQL3,
-                        ["PROGRESS", result[0].pay_id, new Date().toISOString(), req.body.order_id],
-                        function (err, result = [], fields) {
-                          if (err) {
-                            return res.status(400).json({
-                              status: "error",
-                              error: "req body cannot be empty",
-                            });
-                          } else {
-                            console.log("결과 페이먼트???",result);
-                              return res.status(200).json({
-                                  status: "success",
-                              });     
-                          }
-                        }
-                      );
-                  }
-                }
-              );
-          }
-        }
-      );
+      const CREATE_PAYMENT_SQL = "insert into payment(order_id, amount_pay, register_at) values (?,?,?)";
+      const insertRs = await executeQuery(CREATE_PAYMENT_SQL, [req.body.order_id, req.body.total_price, new Date().toISOString()]);
+      if (insertRs.status === "success") {
+        const SELECT_PAYMENT_SQL = "select * from payment where order_id=? order by register_at DESC limit 1;"
+        const selectRs = await executeQuery(SELECT_PAYMENT_SQL, [req.body.order_id]);
+        const paymentInfo = selectRs.data.length > 0 ? selectRs.data[0] : {}
+
+        const UPDATE_ORDER_SQL = "update shop_order set order_status=?, pay_id=?, update_at=? where order_id=?"
+        const updateRs = await executeQuery(UPDATE_ORDER_SQL, ["PROGRESS", paymentInfo.pay_id, new Date().toISOString(), req.body.order_id]);
+
+        const SELECT_ORDER_DETAILS = "select * from shop_order_detail where order_id=?"
+        const selectOrderDetailRs = await executeQuery(SELECT_ORDER_DETAILS, [req.body.order_id]);
+        
+        const productsData = selectOrderDetailRs.data || [];
+      
+        const SELECT_INVENTORY = "select * from inventory where prod_id=?";
+        const UPDATE_INVENTORY = "update inventory set inventory_quantity=?, update_at=? where prod_id=?";
+
+        productsData.forEach(async prod => {
+          const selectInventoryRs = await executeQuery(SELECT_INVENTORY, [prod.prod_id]);
+          const inventoryInfo = selectInventoryRs.data[0] || {};
+
+          executeQuery(UPDATE_INVENTORY, [inventoryInfo.inventory_quantity - prod.order_quantity, new Date().toISOString(), prod.prod_id]);
+        })
+
+        return res.status(200).json(updateRs);  
+      } else {
+        return res.status(400).json(insertRs);
+      }
 
     } else {
       return res.status(400).json({
