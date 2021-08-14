@@ -1,56 +1,43 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../connection");
-const { dycryptionData, encryptionData, generateAccessToken, generateRefreshToken, verifyAccessToken } = require("../util/utilFunction");
+const { dycryptionData, encryptionData, generateAccessToken, generateRefreshToken, verifyAccessToken, executeQuery } = require("../util/utilFunction");
 
-router.post("/signup", (req, res) => {
+router.post("/signup", async (req, res) => {
 
   if (req.body.id && req.body.password) {
       const SQL =
         "INSERT INTO member(id, password, register_at) VALUES(?,?,?)";
-      connection.query(
-        SQL,
-        [req.body.id, req.body.password, new Date().toISOString()],
-        function (err, result, fields) {
-          if (err) {
-            return res.status(400).json({
-              status: "error",
-              error: "req body cannot be empty",
-            });
-          } else {
-            return res.status(200).json({
-              status: "success"
-            });
-          }
-        }
-      );
-  } else {
-    return res.status(400).json({
-          status: 'error',
-          error: 'req body cannot be empty',
-    }); 
-  }
+      const rs = await executeQuery(SQL, [req.body.id, req.body.password, new Date().toISOString()]);
+      console.log("결과?",rs)
+
+      if (rs.status === "success") {
+        return res.status(200).json(rs);
+      } else {
+        return res.status(400).json({
+          ...rs,
+          message: rs.message.sqlMessage
+        });
+      }
+    } else {
+        return res.status(400).json({
+          status: "fail",
+          message: "incorrect body"
+        });
+    }
 });
 
-router.post("/signin", (req, res) => {
+router.post("/signin", async (req, res) => {
       console.log("data", req.body);
 
   if (req.body.id && req.body.password) {
       const SQL = "SELECT * FROM member where id=?";
+      const rs = await executeQuery(SQL, [req.body.id]);
+      console.log("결과?",rs)
 
-      connection.query(
-        SQL,
-        [req.body.id],
-        function (err, result = [], fields) {
-          if (err) {
-            return res.status(400).json({
-              status: "error",
-              error: "req body cannot be empty",
-            });
-          } else {
-            console.log("결과",result);
-            if (result.length > 0) {
-                const selectedRs = result[0] || {};
+      if (rs.status === "success") {
+            if (rs.data.length > 0) {
+                const selectedRs = rs.data[0] || {};
 
                 if (req.body.password === selectedRs.password) {
                       const accessToken = generateAccessToken(req.body.id);
@@ -62,24 +49,27 @@ router.post("/signin", (req, res) => {
                         refreshToken
                     });     
                 } else {
-                    return res.status(200).json({
-                        status: "success",
-                        message: "incorrect email or password"
+                    return res.status(400).json({
+                        status: "fail",
+                        message: "incorrect id or password"
                     });
                 }
             } else {
-                return res.status(200).json({
-                  status: "success",
-                  message: "incorrect email or password"
+                return res.status(400).json({
+                  status: "fail",
+                  message: "incorrect id or password"
                 });
             }
-          }
-        }
-      );
+      } else {
+        return res.status(400).json({
+          ...rs,
+          message: rs.message.sqlMessage
+        });
+      }
   } else {
     return res.status(400).json({
-          status: 'error',
-          error: 'req body cannot be empty',
+          status: 'fail',
+          error: 'incorrect body',
     }); 
   }
 });

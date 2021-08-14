@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../connection");
-const { verifyAccessToken } = require("../util/utilFunction");
+const { verifyAccessToken, executeQuery } = require("../util/utilFunction");
 
 /**
  * TODO Swagger UI 연결하도록
@@ -10,25 +10,15 @@ const { verifyAccessToken } = require("../util/utilFunction");
 router.get("/category",async (req, res) => {
 
       const SQL = "SELECT * FROM category";
+      const rs = await executeQuery(SQL);
+      console.log("결과?",rs)
 
-      connection.query(
-        SQL,
-        null,
-        function (err, result = [], fields) {
-          if (err) {
-            return res.status(400).json({
-              status: "error",
-              error: "req body cannot be empty",
-            });
-          } else {
-            console.log("결과",result);
-              return res.status(200).json({
-                  status: "success",
-                  data: result
-              });     
-          }
-        }
-      );
+      if (rs.status === "success") {
+        return res.status(200).json(rs);
+      } else {
+        return res.status(400).json(rs);
+      }
+
 });
 
 /**
@@ -37,26 +27,13 @@ router.get("/category",async (req, res) => {
 router.get("/category/:id/items",async (req, res) => {
 
       const SQL = "select * from product p left join inventory i on p.prod_id = i.prod_id where cate_id=?";
+      const rs = await executeQuery(SQL, [req.params.id]);
 
-      connection.query(
-        SQL,
-        [req.params.id],
-        function (err, result = [], fields) {
-          if (err) {
-            return res.status(400).json({
-              status: "error",
-              error: "req body cannot be empty",
-            });
-          } else {
-            console.log("결과",result);
-              return res.status(200).json({
-                  status: "success",
-                  data: result
-              });     
-          }
-        }
-      );
-
+      if (rs.status === "success") {
+        return res.status(200).json(rs);
+      } else {
+        return res.status(400).json(rs);
+      }
 });
 
 /**
@@ -64,26 +41,16 @@ router.get("/category/:id/items",async (req, res) => {
  */
 router.get("/item/:id",async (req, res) => {
       const SQL = "select * from product p left join inventory i on p.prod_id = i.prod_id where i.prod_id=?";
+      const rs = await executeQuery(SQL, [req.params.id]);
 
-      connection.query(
-        SQL,
-        [req.params.id],
-        function (err, result = [], fields) {
-          if (err) {
-            console.log(err)
-            return res.status(400).json({
-              status: "error",
-              error: "req body cannot be empty",
-            });
-          } else {
-            console.log("결과",result);
-              return res.status(200).json({
-                  status: "success",
-                  data: result.length > 0 ? result[0] : {}
-              });     
-          }
-        }
-      );
+      if (rs.status === "success") {
+        return res.status(200).json({
+          ...rs,
+          data: rs.data.length > 0 ? rs.data[0] : {}
+        });
+      } else {
+        return res.status(400).json(rs);
+      }
 
 });
 
