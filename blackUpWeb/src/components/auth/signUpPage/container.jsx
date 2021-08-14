@@ -28,10 +28,9 @@ const Container = (props) => {
         console.log('auth==>', encrypted)
 
         alert('hello');
-        axios.post('http://localhost:8080/auth/signUp',null,{
-            headers:{
-                "Authorization" : `Basic ${encrypted}`
-            }
+        axios.post('http://localhost:8080/auth/signup',{
+            id,
+            password: pwd
         })
         
 
