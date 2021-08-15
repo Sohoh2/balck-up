@@ -6,8 +6,7 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
-  NavItem,
-  NavLink,
+
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -35,7 +34,6 @@ const Presenter = (props) => {
                   MADE
                 </DropdownToggle>
                 <DropdownMenu right>
-                  <DropdownItem>                     
                     {/* <Link className="navigationMenuItem" to="/made">
                       {menuList.data[0].cate_name}
                     </Link>
@@ -44,13 +42,15 @@ const Presenter = (props) => {
                   <Link className="navigationMenuItem" to="/made">
                       {menuList.data[1].cate_name}
                     </Link>        */}
-                    {/* {menuList.map((data,idx) =>(
-                        <Link className="navigationMenuItem" to="/made">
-                            {data.data[idx].cate_name}
+                    {menuList.map((data,idx) =>(
+                    <DropdownItem>                     
+                        <Link className="navigationMenuItem" to={`/made/${data.cate_id}`}>
+                            {data.cate_name}
                         </Link>
-                    ))
-                    } */}
                     </DropdownItem>
+
+                    ))
+                    }
                 </DropdownMenu>
               </UncontrolledDropdown>
               <UncontrolledDropdown nav inNavbar>

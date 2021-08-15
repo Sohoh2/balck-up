@@ -17,8 +17,8 @@ const Router = (props) => {
                 <Route exact path='/signUp' component={SignUpPage} />
                 <Route exact path='/signIn' component={SignInPage} />
                 <Route exact path='/main' component={MainPage} />
-                <Route exact path='/made' component={MadePage} />
-                <Route exact path='/display' component={DisplayPage} />
+                <Route exact path='/made/:id' component={MadePage} />
+                <Route exact path='/display/:id' component={DisplayPage} />
                 <Route component={MainPage} />
             </Switch>
 
