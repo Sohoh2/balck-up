@@ -31,16 +31,24 @@ const Container = (props) => {
 
         console.log('auth==>', encrypted)
 
-        alert('hello');
         axios.post('http://localhost:8080/auth/signin',{
             id,
             password: pwd
         })
         .then(rs => {
-            history.push('/')
+            console.log('rs===> ',rs);
+            if (rs.status === 200) {
+            alert('Welcome Back :)');
+
+            history.push('/');
+            localStorage.setItem('accessToken', rs.accessToken); 
+            localStorage.setItem('refreshToken', rs.refreshToken);
+            }
         })
         .catch(err => {
-            alert(err)
+            console.log(err);
+            alert('Login faild! Please recheck the account and password and try again.')
+
 
         })
         

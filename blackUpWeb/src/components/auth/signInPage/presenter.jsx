@@ -1,5 +1,6 @@
 import { Button, Input,Row, Col, InputGroup, Label, Form } from 'reactstrap';
 import { AvForm, AvField } from "availity-reactstrap-validation"
+import commonStyles from '../../../common/css/common.css'
 
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -26,11 +27,10 @@ const Presenter = (props) => {
                 <div className="bg-login text-center">
                   <div className="bg-login-overlay"></div>
                   <div className="position-relative">
-                    <h5 className="text-white font-size-20">Welcome Back !</h5>
-                    <p className="text-white-50 mb-0">Sign in to continue to Qovex.</p>
-                    <Link to="/" className="logo logo-admin mt-4">
-                      <img src={logo} alt="" height="30" />
-                    </Link>
+                    <p className="text-white-50 mb-0">Sign in to continue to BLACK UP.</p>
+                    <div className={commonStyles.titleArea}>
+                      <h2>Login</h2>
+                    </div>
                   </div>
                 </div>
                 <div className="card-body pt-5">
@@ -44,12 +44,12 @@ const Presenter = (props) => {
 
                       <div className="mb-3">
                         <AvField
-                          name="email"
-                          label="Email"
+                          name="id"
+                          label="ID"
                           value={id}
                           className="form-control"
                           placeholder="Enter email"
-                          type="email"
+                          type="text"
                           required
                           onChange={(e) => setId(e.target.value)}
 

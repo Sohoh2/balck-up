@@ -46,6 +46,14 @@ code  {
   color: #222;
 }
 
+.navigationMenuItem {
+  text-decoration: none;
+
+  margin: auto 1rem;
+  font-weight: 500;
+  color: #131313;
+}
+
 /* Banner */
 .bannerImg {
   width: 100%;

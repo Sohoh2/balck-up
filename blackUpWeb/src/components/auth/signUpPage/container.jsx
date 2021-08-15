@@ -26,11 +26,18 @@ const Container = (props) => {
         const encrypted = encryptionData(id, pwd);
 
         console.log('auth==>', encrypted)
-
-        alert('hello');
         axios.post('http://localhost:8080/auth/signup',{
             id,
             password: pwd
+        })
+        .then(rs => {
+            alert('Thanks! your account has been successfully created.')
+            props.history.push('/signIn');
+        })
+        .catch(err => {
+            console.log(err);
+
+
         })
         
 

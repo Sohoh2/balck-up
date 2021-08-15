@@ -7,7 +7,7 @@ import { AvForm, AvField } from "availity-reactstrap-validation"
 
 import { Link } from 'react-router-dom';
 import logo from '../../../common/assets/img/navigation/navigationLogo.png'
-
+import commonStyles from '../../../common/css/common.css'
 
 const Presenter = (props) => {
     const { id, setId, pwd, setPwd , sendBtn} = props;
@@ -30,11 +30,10 @@ const Presenter = (props) => {
                 <div className="bg-login text-center">
                   <div className="bg-login-overlay"></div>
                   <div className="position-relative">
-                    <h5 className="text-white font-size-20">SignUp</h5>
                     <p className="text-white-50 mb-0">Sign in to continue to Qovex.</p>
-                    <Link to="/" className="logo logo-admin mt-4">
-                      <img src={logo} alt="" height="30" />
-                    </Link>
+                    <div className={commonStyles.titleArea}>
+                      <h2>Join</h2>
+                    </div>
                   </div>
                 </div>
                 <div className="card-body pt-5">
@@ -48,12 +47,12 @@ const Presenter = (props) => {
 
                       <div className="mb-3">
                         <AvField
-                          name="email"
-                          label="Email"
+                          name="id"
+                          label="ID"
                           value={id}
                           className="form-control"
-                          placeholder="Enter email"
-                          type="email"
+                          placeholder="Enter ID"
+                          type="text"
                           required
                           onChange={(e) => setId(e.target.value)}
 
