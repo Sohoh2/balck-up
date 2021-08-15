@@ -158,4 +158,33 @@ router.post("/cancel", async (req, res) => {
     }   
 });
 
+router.post("/myorders",async (req, res) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    if (!token) {
+        console.log("wrong token format or token is not sended");
+        return res.sendStatus(400);
+    }
+
+    const verifyResult = await verifyAccessToken(token, "access");
+    if (verifyResult.id) {
+        console.log(req.body)
+      const SQL = "select * from shop_order left join shop_order_detail sod on shop_order.order_id = sod.order_id where mem_id=?";
+      const selectRs = await executeQuery(SQL, [req.body.mem_id]);
+
+      if (selectRs.status === "success") {
+          return res.status(200).json(selectRs);     
+      } else {
+        return res.status(400).json(selectRs);
+      }
+    } else {
+      return res.status(400).json({
+          status: "fail",
+          message: "unauthorized"
+      });   
+    }
+
+
+});
+
 module.exports = router;
