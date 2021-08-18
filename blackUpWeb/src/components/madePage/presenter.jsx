@@ -8,6 +8,8 @@ import displayImg2 from '../../common/assets/img/mainPage/displayImg2.jpeg';
 import displayImg3 from '../../common/assets/img/mainPage/displayImg3.jpeg';
 
 const Presenter = (props) => {
+  const {bottomItemList  = [], topItemList  = []} = props;
+
     return(
         <>
             <Container>
@@ -24,40 +26,53 @@ const Presenter = (props) => {
 export default Presenter;
 
 const ItemList = (props) => {
+  const {bottomItemList  = [], topItemList  = []} = props;
 
 
     
     const style = { padding: '4px 0', textAlign:'center'};
 
-    const displayImages = [
-        {
-          data: displayImg0,
-          title: '에이티 써머 밴딩 팬츠',
-          price : '19,000 won',
-          description : '최단기간 1.5만장 돌파!'
-        },
-        {
-          data: displayImg1,
-          title: '에이티 써머 밴딩 팬츠',
-          price : '19,000 won',
-          description : '최단기간 1.5만장 돌파!'
-        },
-        {
-          data: displayImg2,
-          title: '에이티 써머 밴딩 팬츠',
-          price : '19,000 won',
-          description : '최단기간 1.5만장 돌파!'
-        },
-        {
-          data: displayImg3,
-          title: '에이티 써머 밴딩 팬츠',
-          price : '19,000 won',
-          description : '최단기간 1.5만장 돌파!'
-        }
-      ];
+
     return(
         <>
+
+        {window.location.pathname === '/made/1' 
+?      
         <Row >
+        {topItemList.map((data,idx) =>(
+                    <Col className="gutter-row" span={6}>
+                    <div style={style}>
+                    <Link className="navigationMenu" to={`/display/${data.prod_id}`} >
+                        <img 
+                        src={data.prod_img}
+                        className="madeImg"/>
+                        <div>{data.prod_name}</div>
+                        <div>{data.price}won</div>
+                        </Link>
+                    </div>
+                  </Col>
+        ))}
+    </Row>
+    
+    :
+    <Row >
+    {bottomItemList.map((data,idx) =>(
+                <Col className="gutter-row" span={6}>
+                <div style={style}>
+                    <Link className="navigationMenu" to={`//display/${data.prod_id}`} >
+                    <img 
+                    src={data.prod_img}
+                    className="madeImg"/>
+                    <div>{data.prod_name}</div>
+                    <div>{data.price}won</div>
+                    </Link>
+                </div>
+              </Col>
+    ))}
+</Row>
+    
+    }
+        {/* <Row >
         {displayImages.map((img,idx) =>(
                     <Col className="gutter-row" span={6}>
                     <div style={style}>
@@ -70,10 +85,9 @@ const ItemList = (props) => {
                         <div className="description">{img.description}</div>
                         </Link>
                     </div>
-                    
                   </Col>
         ))}
-    </Row>
+    </Row> */}
     </>
     )
 

@@ -1,23 +1,38 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import Presenter from './presenter';
 
 const Container = (props) => {
-    const [price, setPrice] = useState('19,000');
-    const [description, setDescription] = useState('에이티 썸머 팬츠');
-    const [totalPrice, setTotalPrice] = useState('19,000');
-    const [qty, setQty] = useState(1);
+    const [itemDetailInfo, setItemDetailInfo] = useState([])
+    const [empty_val, setempty_val] = useState(1);
+
+
+
+
+    useEffect(() => {
+      menuListFetch();
+      console.log(window.location.pathname)
+    }, []);
+  
+    const menuListFetch = () => {
+      axios
+        .get("http://localhost:8080/prod/item/1")
+        .then((response) => response)
+        .then((res) => {
+          console.log(res.data.data);
+          setItemDetailInfo(res.data.data)
+     
+
+        }) 
+        .catch((error) => console.log('error', error));
+    };
 
 
     return(
         <Presenter {...props}
-        price={price}
-        setPrice={setPrice}
-        description={description}
-        setDescription={setDescription}
-        totalPrice={totalPrice}
-        setTotalPrice={setTotalPrice}
-        qty={qty}
-        setQty={setQty}
+        itemDetailInfo={itemDetailInfo}
+        empty_val={empty_val}
+        setempty_val={setempty_val}
         />
     
             

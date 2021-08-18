@@ -12,10 +12,10 @@ const Container = (props) => {
   const menuListFetch = () => {
     axios
       .get('http://localhost:8080/prod/category')
-      .then((response) => response.data)
+      .then((response) => response)
       .then((res) => {
-        console.log(res);
-        setMenuList(res);
+        console.log(res.data.data);
+        setMenuList(res.data.data);
       }) 
       .catch((error) => console.log('error', error));
   };
