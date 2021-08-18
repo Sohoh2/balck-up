@@ -27,6 +27,8 @@ router.post("/signup", async (req, res) => {
     }
 });
 
+
+
 router.post("/signin", async (req, res) => {
       console.log("data", req.body);
 
@@ -97,6 +99,30 @@ router.post("/refresh", async (req, res) => {
         status: "fail"
       });
     }
+});
+router.get("/info", async (req, res) => {
+    let authHeader = req.headers.authorization;
+    let token = authHeader && authHeader.split(" ")[1];
+    const verifyResult = await verifyAccessToken(token, "access") || {};
+
+    if (!token) {
+        console.log("wrong token format or token is not sended");
+        return res.sendStatus(400);
+    }
+
+    const SQL =
+      "SELECT * FROM member where id=?";
+    const rs = await executeQuery(SQL, [verifyResult.id]);
+
+    if (rs.status === "success") {
+      return res.status(200).json(rs);
+    } else {
+      return res.status(400).json({
+        ...rs,
+        message: rs.message.sqlMessage
+      });
+    }
+
 });
 
 // access token 유효성 확인을 위한 예시 요청
