@@ -26,7 +26,7 @@ export default Presenter;
 
 
 const OrderDetailForm = (props) => {
-  const {prod_id, prod_name, prod_img, price, empty_val, total_price } = props
+  const {prod_id, prod_name, prod_img, price, empty_val, total_price, email, setEmail } = props
   return(
     <Table>
     <thead>
@@ -49,7 +49,7 @@ const OrderDetailForm = (props) => {
         <td>{prod_name}</td>
         <td>{price}</td>
         <td>{empty_val}</td>
-        <td style={{textAlign:'right'}}>total price : {total_price} won </td>
+        <td>{total_price} won </td>
 
       </tr>
     </tbody>
@@ -69,8 +69,6 @@ const UserDetailForm = (props) => {
             <Card>
               <CardBody>
                 <CardTitle className="h4">주문정보</CardTitle>
-
-
                 <Row className="mb-3">
                   <label
                     htmlFor="example-text-input"
@@ -139,7 +137,7 @@ const UserDetailForm = (props) => {
                     />
                   </div>
                 </Row>
-                {/* <Row className="mb-3">
+                <Row className="mb-3">
                   <label
                     htmlFor="example-email-input"
                     className="col-md-2 col-form-label"
@@ -155,13 +153,13 @@ const UserDetailForm = (props) => {
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
-                </Row> */}
+                </Row>
               </CardBody>
             </Card>
           </Col>
         </Row>
-        <Button onClick={CreateOrder}>send user data</Button>
-        <button onClick={requestPay}>결제하기</button>
+        <Button onClick={CreateOrder}>결제하기</Button>
+        {/* <button onClick={requestPay}>결제하기</button> */}
 
 
       

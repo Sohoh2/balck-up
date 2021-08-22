@@ -1,12 +1,11 @@
 import React from 'react';
 import Container from './container';
 
-const Navigation = (props) => 
+const MyPage = (props) => 
 {
     return(
-        <Container
-        {...props}/>
+        <Container {...props}/>
             
     )};
 
-export default Navigation;
+export default MyPage;

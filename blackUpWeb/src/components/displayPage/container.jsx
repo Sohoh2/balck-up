@@ -5,8 +5,8 @@ import Presenter from './presenter';
 const Container = (props) => {
     const [itemDetailInfo, setItemDetailInfo] = useState([])
     const [empty_val, setempty_val] = useState(1);
-    const [price, setPrice] = useState('');
-    const [totalPrice, setTotalPrice] = useState('');
+    const [price, setPrice] = useState(0);
+    const [totalPrice, setTotalPrice] = useState(0);
     const [prod_img, setProdImg] = useState('');
     const [prod_name, setProdName] = useState('');
 
@@ -16,14 +16,15 @@ const Container = (props) => {
 
     // sessionStorage setting
     sessionStorage.setItem('empty_val', JSON.stringify(empty_val));
-    sessionStorage.setItem('total_price', JSON.stringify(totalPrice));
+    sessionStorage.setItem('total_price', totalPrice);
     sessionStorage.setItem('prod_id', prod_id);
     sessionStorage.setItem('prod_img', prod_img);
     sessionStorage.setItem('prod_name', prod_name);
     sessionStorage.setItem('price', price);
 
     const totalPriceCal =  () => {
-      setTotalPrice(price * empty_val);
+
+        setTotalPrice(price * empty_val);
       console.log('총 가격',totalPrice);
     }
 
@@ -45,7 +46,7 @@ const Container = (props) => {
     useEffect(() => {
       menuListFetch();
       totalPriceCal();
-    }, [empty_val]);
+    }, [empty_val, totalPrice]);
   
     return(
         <Presenter {...props}

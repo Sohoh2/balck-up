@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Presenter from './presenter';
 import axios from 'axios';
 import CrytoJs from 'crypto-js';
@@ -11,8 +11,8 @@ const Container = (props) => {
 
     const [id, setId] = useState("");
     const [pwd, setPwd] = useState('');
-    console.log(id);
-    console.log(pwd);
+    const [accessToken, setAccessToken] = useState(false);
+
 
     const secretKey = 'Sunny';
 
@@ -21,6 +21,12 @@ const Container = (props) => {
 
         return encrypted;
         
+    }
+
+    const HasAccessToekn = () => {
+        if(localStorage.getItem('accessToekn')){
+            setAccessToken(true);
+        }
     }
 
     const sendBtn = () => {
@@ -54,6 +60,10 @@ const Container = (props) => {
         
 
     }
+
+    useEffect(() =>{
+
+    },[accessToken])
 
     return(
         <Presenter

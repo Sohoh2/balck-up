@@ -7,6 +7,7 @@ const[memid, setMenId] = useState('');
 const[phone, setPhone] = useState('');
 const[address, setAddress] = useState('');
 const[name, setName] = useState('');
+const[email, setEmail] = useState('');
 const[description, setDescription] = useState('');
 const[products, setProduct] = useState([]);
 const [itemDetailInfo,setItemDetailInfo] = useState([]);
@@ -25,35 +26,40 @@ useEffect(() => {
 }, [])
 
 
-const  requestPay = () => {
- IMP.request_pay({
+  const CreateOrder = () => {
+    const value = localStorage.getItem('accessToken');
+    console.log("토큰=>", value)
+
+
+  IMP.request_pay({
 	merchant_uid : 'merchant_' + new Date().getTime(),
 	name : '결제테스트',
-	amount : 14000,
-	buyer_email : 'iamport@siot.do',
-	buyer_name : '구매자',
-	buyer_tel : '010-1234-5678',
-	buyer_addr : '서울특별시 강남구 삼성동',
+	amount : 1000,
+	buyer_email : email,
+	buyer_name : name,
+	buyer_tel : phone,
+	buyer_addr : address,
 	buyer_postcode : '123-456'
 }, function(rsp) {
 	if ( rsp.success ) {
 		var msg = '결제가 완료되었습니다.';
 		msg += '고유ID : ' + rsp.imp_uid;
 		msg += '상점 거래ID : ' + rsp.merchant_uid;
-		msg += '결제 금액 : ' + rsp.paid_amount;
-		msg += '카드 승인번호 : ' + rsp.apply_num;
-	} else {
-		var msg = '결제에 실패하였습니다.';
-		msg += '에러내용 : ' + rsp.error_msg;
-    console.log(rsp)
-	}
-});
-}
+    
+    // 주문생성  post 
 
-
-  const CreateOrder = () => {
-    const value = localStorage.getItem('accessToken');
-    console.log("토큰=>", value)
+    fetch("http://localhost:8080/order", requestOptions)
+    .then(response => response.json())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+    
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+    
 
     var myHeaders = new Headers();
 
@@ -68,37 +74,28 @@ const  requestPay = () => {
       "description": description,
       "products": [
         {
-          "prod_id": 1,
-          "order_quantity": 3
+          "prod_id": prod_id,
+          "order_quantity": empty_val
         },
-        {
-          "prod_id": 4,
-          "order_quantity": 2
-        }
       ]
     });
-    
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
-    };
-    
-    fetch("http://localhost:8080/order", requestOptions)
-      .then(response => response.json())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
+
+	} else {
+		var msg = '결제에 실패하였습니다.';
+		msg += '에러내용 : ' + rsp.error_msg;
+    console.log(rsp)
+	}
+});
   }
 
 
 
   const menuListFetch = () => {
     axios
-      .get("http://localhost:8080/prod/item/1")
+      .get(`http://localhost:8080/prod/item/${prod_id}`)
       .then((response) => response)
       .then((res) => {
-        console.log(res.data.data);
+        console.log('주문디테일 보셈',res.data.data);
         setItemDetailInfo(res.data.data)
   
       }) 
@@ -108,14 +105,10 @@ const  requestPay = () => {
 
   useEffect(() => {
     menuListFetch();
-
-    console.log(window.location.pathname)
   }, []);
 
 
 
-
-   
 
 
     return(
@@ -126,6 +119,8 @@ const  requestPay = () => {
         setPhone={setPhone}
         address={address}
         setAddress={setAddress}
+        email={email}
+        setEmail={setEmail}
         name={name}
         setName={setName}
         description={description}
@@ -133,7 +128,6 @@ const  requestPay = () => {
         products={products}
         setProduct={setProduct}
         CreateOrder={CreateOrder}
-        requestPay={requestPay}
         prod_id={prod_id}
         empty_val={empty_val}
         prod_img={prod_img}

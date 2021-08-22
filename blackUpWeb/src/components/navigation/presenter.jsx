@@ -15,10 +15,11 @@ import {
 } from 'reactstrap';
 import navigationLogoImg from '../../common/assets/img/navigation/navigationLogo.png';
 const Presenter = (props) => {
-  const { menuList = [] } = props;
+  const { menuList = [], accessToken } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
+
   return (
     <>
       <div>
@@ -55,10 +56,33 @@ const Presenter = (props) => {
               </UncontrolledDropdown>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret className="navigationMenu">
-                  내정보
+                  My Page
                 </DropdownToggle>
                 <DropdownMenu right>
-                  <DropdownItem>
+                    {accessToken?
+                    <>
+                                      <DropdownItem>
+                                      <Link className="navigationMenuItem" to="/myPage">
+                                        MY PAGE
+                                      </Link>
+                                    </DropdownItem>
+                                    <DropdownItem divider />
+                                    <DropdownItem>
+                                      <Link
+                                        className="navigationMenuItem"
+                                        onClick={() => {
+                                          localStorage.clear();
+                                        }}
+                                        to="/signIn"
+                                      >
+                                        Logout
+                                      </Link>{' '}
+                                    </DropdownItem>
+                                    </>
+                    
+                    :
+                    <>
+                    <DropdownItem>
                     <Link className="navigationMenuItem" to="/signIn">
                       LOGIN
                     </Link>
@@ -68,23 +92,9 @@ const Presenter = (props) => {
                       JOIN
                     </Link>
                   </DropdownItem>
-                  <DropdownItem>
-                    <Link className="navigationMenuItem" to="/signUp">
-                      MY PAGE
-                    </Link>
-                  </DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem>
-                    <Link
-                      className="navigationMenuItem"
-                      onClick={() => {
-                        localStorage.clear();
-                      }}
-                      to="/signIn"
-                    >
-                      Logout
-                    </Link>{' '}
-                  </DropdownItem>
+                  </>
+
+                    }
                 </DropdownMenu>
               </UncontrolledDropdown>
             </Nav>

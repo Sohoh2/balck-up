@@ -3,11 +3,20 @@ import React, { useEffect, useState } from 'react';
 import Presenter from './presenter';
 
 const Container = (props) => {
+
   const [menuList, setMenuList] = useState([]);
+  const [accessToken, setAccessToken] = useState(false)
+  
+  console.log('토큰???????',localStorage.getItem('accessToken'))
+
 
   useEffect(() => {
     menuListFetch();
-  }, []);
+
+    if(localStorage.getItem('accessToken')){
+      setAccessToken(true);
+    }
+  }, [accessToken]);
 
   const menuListFetch = () => {
     axios
@@ -19,7 +28,11 @@ const Container = (props) => {
       .catch((error) => console.log('error', error));
   };
 
-  return <Presenter {...props} menuList={menuList} setMenuList={setMenuList} />;
+  return <Presenter {...props}
+   menuList={menuList} 
+   setMenuList={setMenuList}
+   accessToken={accessToken}
+    />;
 };
 
 export default Container;
