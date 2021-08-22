@@ -14,7 +14,7 @@ const Container = (props) => {
 
     useEffect(() => {
       menuListFetch();
-      console.log(window.location.pathname);
+      // console.log(window.location.pathname);
       console.log('history');
     }, [cate_id]);
   

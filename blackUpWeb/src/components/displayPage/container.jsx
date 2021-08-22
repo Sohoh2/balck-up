@@ -23,7 +23,6 @@ const Container = (props) => {
     sessionStorage.setItem('price', price);
 
     const totalPriceCal =  () => {
-
         setTotalPrice(price * empty_val);
       console.log('총 가격',totalPrice);
     }
@@ -46,6 +45,11 @@ const Container = (props) => {
     useEffect(() => {
       menuListFetch();
       totalPriceCal();
+
+        
+
+
+
     }, [empty_val, totalPrice]);
   
     return(

@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import MyPage from './components/auth/myPage';
 import SignInPage from './components/auth/signInPage';
 import SignUpPage from './components/auth/signUpPage';
+import ChartPage from './components/chartPage';
 import DisplayPage from './components/displayPage';
 import MadePage from './components/madePage';
 import MainPage from './components/mainPage';
@@ -22,7 +23,8 @@ const Router = (props) => {
                 <Route exact path='/main' component={MainPage} />
                 <Route exact path='/made/:cate_id' component={MadePage} />
                 <Route exact path='/display/:prod_id' component={DisplayPage} />
-                <Route exact path='/orderForm/:id' component={OrderFormPage} />
+                <Route exact path='/orderForm' component={OrderFormPage} />
+                <Route exact path='/chart' component={ChartPage} />
                 <Route component={MainPage} />
             </Switch>
 
