@@ -59,7 +59,7 @@ const ItemList = (props) => {
     {bottomItemList.map((data,idx) =>(
                 <Col className="gutter-row" span={6}>
                 <div style={style}>
-                    <Link className="navigationMenu" to={`//display/${data.prod_id}`} >
+                    <Link className="navigationMenu" to={`/display/${data.prod_id}`} >
                     <img 
                     src={data.prod_img}
                     className="madeImg"/>

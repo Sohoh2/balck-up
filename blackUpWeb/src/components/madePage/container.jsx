@@ -3,17 +3,25 @@ import React, { useEffect, useState } from 'react';
 import Presenter from './presenter';
 
 const Container = (props) => {
+  console.log('props ======>', props );
+  console.log('match ========>', props.match.params.cate_id);
+
     const [topItemList, setTopItemList] = useState([]);
     const [bottomItemList, setBottomItemList] = useState([]);
 
+    console.log(localStorage.getItem('accessToken'))
+    const cate_id = props.match.params.cate_id;
+
     useEffect(() => {
       menuListFetch();
-      console.log(window.location.pathname)
-    }, []);
+      console.log(window.location.pathname);
+      console.log('history');
+    }, [cate_id]);
   
     const menuListFetch = () => {
+    
       axios
-        .get('http://localhost:8080/prod/category/1/items')
+        .get(`http://localhost:8080/prod/category/${cate_id}/items`)
         .then((response) => response)
         .then((res) => {
           console.log(res.data.data);

@@ -36,8 +36,6 @@ const Container = (props) => {
         })
         .catch(err => {
             console.log(err);
-
-
         })
         
 

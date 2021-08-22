@@ -10,7 +10,9 @@ const Presenter = (props) => {
   const {
     itemDetailInfo,
     empty_val,
-    setempty_val
+    setempty_val,
+    totalPrice,
+    totalPriceCal
   } = props;
 
   return (
@@ -33,12 +35,13 @@ const Presenter = (props) => {
               <Col>[MADE]{itemDetailInfo.prod_name} *</Col>
               <Col>
                 <div className="mb-3">
+                  <Row>
                   <Label>잔여수량{itemDetailInfo.inventory_quantity}</Label>
                   <InputGroup>
                     <div
                       className="input-group-append"
                       onClick={() => {
-                        setempty_val(empty_val - 1);
+                        setempty_val(empty_val -1 );
                       }}
                     >
                       <Button type="button" color="primary">
@@ -48,14 +51,19 @@ const Presenter = (props) => {
                     <input
                       type="number"
                       className="form-control"
+                      style={{width:'50%'}}
                       value={empty_val}
+                      onChange={(e) => {
+                        setempty_val(e.target.value);
+                        {totalPriceCal}
+          
+                      }}
                       placeholder="number"
                       readOnly
                     />
                     <div
                       className="input-group-append"
                       onClick={() => {
-                        
                         setempty_val(empty_val + 1);
                       }}
                     >
@@ -64,16 +72,20 @@ const Presenter = (props) => {
                       </Button>
                     </div>
                   </InputGroup>
+                  </Row>
                 </div>
+
               </Col>
               <Col>{itemDetailInfo.price} won</Col>
             </Row>
             <hr />
 
             <Row>
-              <div>TOTAL PRICE({empty_val}) {itemDetailInfo.price * empty_val} won(1개)</div>
+              <div>TOTAL PRICE({empty_val}) {totalPrice} won(1개)</div>
               <div>
+                <Link to={`/orderForm/${itemDetailInfo.prod_id}`}> 
                 <Button className="blackButton">BUY NOW</Button>
+                </Link>
                 <Button className="greyButton">ADD TO CART</Button>
               </div>
             </Row>
